@@ -4,7 +4,7 @@ import glob
 import os
 import multiprocessing
 from time import sleep
-from util import parse_user_yaml, put_values_in_target_key, makedir_if_not_exists, write_yaml_file, \
+from .util import parse_user_yaml, put_values_in_target_key, makedir_if_not_exists, write_yaml_file, \
     assert_files_exist, divide_into_sublists
 
 

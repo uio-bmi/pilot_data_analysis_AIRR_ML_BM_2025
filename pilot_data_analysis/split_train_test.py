@@ -4,7 +4,7 @@ import os
 import shutil
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from util import makedir_if_not_exists
+from .util import makedir_if_not_exists
 
 TRAIN_DIR = 'train'
 TEST_DIR = 'test'

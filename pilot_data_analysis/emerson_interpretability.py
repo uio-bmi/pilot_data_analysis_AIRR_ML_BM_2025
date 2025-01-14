@@ -6,7 +6,7 @@ from multiprocessing import Pool
 import pandas as pd
 from fisher import pvalue_npy
 import numpy as np
-from util import assert_files_exist, makedir_if_not_exists, initialize_logging
+from .util import assert_files_exist, makedir_if_not_exists, initialize_logging
 from pilot_data_analysis.logistic_interpretability import parse_true_signal, compute_jaccard_similarity
 
 

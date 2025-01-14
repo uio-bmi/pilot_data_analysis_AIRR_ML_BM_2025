@@ -6,7 +6,7 @@ import os
 import argparse
 import logging
 from multiprocessing import Pool
-from util import makedir_if_not_exists, assert_files_exist, initialize_logging
+from .util import makedir_if_not_exists, assert_files_exist, initialize_logging
 
 
 def parse_immuneml_logistic_ml_details(ml_details_yaml):
