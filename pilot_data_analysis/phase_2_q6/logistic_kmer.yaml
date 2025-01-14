@@ -1,0 +1,80 @@
+definitions:
+  datasets:
+    train_dataset_n:
+      format: Generic
+      params:
+        path: /path/to/repertoires/
+        metadata_file: /path/to/repertoires/metadata.csv
+        is_repertoire: True
+        separator: "\t"
+        region_type: IMGT_JUNCTION
+        columns_to_load:
+          - junction_aa
+          - v_call
+          - j_call
+        column_mapping:
+          junction_aa: sequence_aas
+          v_call: v_genes
+          j_call: j_genes
+  encodings:
+    feature_size_4:
+      KmerFrequency:
+        k: 4
+        scale_to_unit_variance: True
+        scale_to_zero_mean: True
+  ml_methods:
+    logistic_regression:
+      LogisticRegression:
+        C: [1, 0.1, 0.05, 0.03]
+        class_weight: 
+          - balanced
+        max_iter: 
+          - 500
+        penalty: 
+          - l1
+      model_selection_cv: True
+      model_selection_n_folds: 5
+  reports:
+    my_hp_benchmark: MLSettingsPerformance
+    my_coef_report:
+        Coefficients:
+            coefs_to_plot:
+                - n_largest
+            n_largest: [50]
+instructions:
+  hpoptim_instr:
+    assessment:
+      reports:
+        models: [my_coef_report]
+      split_strategy: manual
+      split_count: 1
+      manual_config:
+        train_metadata_path: /path/to/training_data_metadata.csv
+        test_metadata_path: /path/to/test_data_metadata.csv
+    number_of_processes: 80
+    dataset: train_dataset_n
+    labels:
+    - label_positive
+    metrics:
+    - auc
+    - balanced_accuracy
+    - accuracy
+    - f1_micro
+    - f1_macro
+    - f1_weighted
+    - precision
+    - recall
+    - log_loss
+    - confusion_matrix
+    optimization_metric: balanced_accuracy
+    reports: [my_hp_benchmark]
+    selection:
+      split_count: 1
+      split_strategy: random
+      training_percentage: 1.0
+    settings:
+    - encoding: feature_size_4
+      ml_method: logistic_regression
+    strategy: GridSearch
+    type: TrainMLModel
+    refit_optimal_model: True

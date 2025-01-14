@@ -1,0 +1,120 @@
+definitions:
+  datasets:
+    train_dataset_1:
+      format: Generic
+      params:
+        path: /path/to/repertoires/
+        is_repertoire: True
+        metadata_file: /path/to/repertoires/metadata.csv
+        separator: "\t"
+        region_type: IMGT_JUNCTION
+        columns_to_load:
+          - junction_aa
+          - v_call
+          - j_call
+        column_mapping:
+          junction_aa: sequence_aas
+          v_call: v_genes
+          j_call: j_genes
+  encodings:
+    p_5e04:
+      CompAIRRSequenceAbundance:
+        compairr_path: /path/to/compairr
+        p_value_threshold: 0.0005
+        ignore_genes: False
+        sequence_batch_size: 100000
+        threads: 8
+    p_1e03:
+      CompAIRRSequenceAbundance:
+        compairr_path: /path/to/compairr
+        p_value_threshold: 0.001
+        ignore_genes: False
+        sequence_batch_size: 100000
+        threads: 8
+    p_5e03:
+      CompAIRRSequenceAbundance:
+        compairr_path: /path/to/compairr
+        p_value_threshold: 0.005
+        ignore_genes: False
+        sequence_batch_size: 100000
+        threads: 8
+    p_1e02:
+      CompAIRRSequenceAbundance:
+        compairr_path: /path/to/compairr
+        p_value_threshold: 0.01
+        ignore_genes: False
+        sequence_batch_size: 100000
+        threads: 8
+    p_5e02:
+      CompAIRRSequenceAbundance:
+        compairr_path: /path/to/compairr
+        p_value_threshold: 0.05
+        ignore_genes: False
+        sequence_batch_size: 100000
+        threads: 8
+    p_1e01:
+      CompAIRRSequenceAbundance:
+        compairr_path: /path/to/compairr
+        p_value_threshold: 0.1
+        ignore_genes: False
+        sequence_batch_size: 100000
+        threads: 8
+  ml_methods:
+    ml:
+      ProbabilisticBinaryClassifier:
+        max_iterations: 1000
+        update_rate: 0.01
+  reports:
+    enc_data: DesignMatrixExporter
+    relevant_sequences: RelevantSequenceExporter
+instructions:
+  hpoptim_instr:
+    reports: []
+    assessment: 
+      split_strategy: manual
+      split_count: 1
+      manual_config:
+        train_metadata_path: /path/to/training_data_metadata.csv
+        test_metadata_path: /path/to/test_data_metadata.csv
+      reports:
+        encoding: [enc_data, relevant_sequences]
+        models: []
+    selection:
+      split_count: 5
+      split_strategy: k_fold
+      training_percentage: 0.7
+      reports:
+        encoding: [enc_data, relevant_sequences]
+    number_of_processes: 80
+    dataset: train_dataset_1
+    labels:
+    - label_positive:
+        positive_class: True
+    optimization_metric: balanced_accuracy
+    metrics:
+    - auc
+    - accuracy
+    - balanced_accuracy
+    - f1_micro
+    - f1_macro
+    - f1_weighted
+    - precision
+    - recall
+    - log_loss
+    - confusion_matrix
+    strategy: GridSearch
+    type: TrainMLModel
+    refit_optimal_model: True
+    settings:
+    - encoding: p_5e04
+      ml_method: ml
+    - encoding: p_1e03
+      ml_method: ml
+    - encoding: p_5e03
+      ml_method: ml
+    - encoding: p_1e02
+      ml_method: ml
+    - encoding: p_5e02
+      ml_method: ml
+    - encoding: p_1e01
+      ml_method: ml
